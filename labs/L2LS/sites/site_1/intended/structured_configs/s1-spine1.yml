@@ -3,12 +3,6 @@ aaa_authorization:
     default: local
 aaa_root:
   disabled: true
-banners:
-  motd: 'You shall not pass. Unless you are authorized. Then you shall pass.
-
-    EOF
-
-    '
 config_end: true
 daemon_terminattr:
   cvaddrs:
@@ -118,17 +112,6 @@ local_users:
   privilege: 15
   role: network-admin
   sha512_password: $6$arista$eyFR5m1j4fFJItUzTW41EYMmkoIzBneiPu0M5I7v4lw7nTedmNjUW6.BRq1WaLc.O4nOQhFGiPQ5Trf/HCx0H0
-  ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI8Ms0bAHmZyCdXc12+HrC4pn6OZSYpixdgDQq6OqeBHhWYbGdpvqe9Vedn5iK+/rWLvSy8ESzAyLFQ60psrCsOoXrU9Kzfa5fcS9lnLZynwEZSGakzfs5t6ZfjqPA6UimPXgBlovVvyjAp8xd+7d+66pEH6sAgASpXn6XexqBHGMG59hkQcoIhxkQlN8TcUiVfLyHbPOTBHnhd+Gyk9GKMqt9lwn7E2+FGFkm2yovoWa5YdI9wg84684m8tdwvhEtKttHlITsoRDXX2wcoj0vOfjbM/Ry/3MpTZe2FAYkHXFX6unl27s+p9Z59KpIKTy78R483hFYxWoX32kZVN97
-    arista@corning-taiwan-10-8e63be66-eos
-logging:
-  vrfs:
-  - name: default
-    source_interface: Management0
-    hosts:
-    - name: 10.200.0.108
-      protocol: udp
-    - name: 10.200.1.108
-      protocol: udp
 loopback_interfaces:
 - name: Loopback0
   description: ROUTER_ID
@@ -194,7 +177,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 20,30
+      allowed_vlan: '20'
 router_ospf:
   process_ids:
   - id: 100
@@ -253,15 +236,6 @@ vlan_interfaces:
   tenant: MY_FABRIC
   tags:
   - App
-- name: Vlan30
-  description: Thirty
-  shutdown: false
-  ip_address: 10.60.60.2/24
-  ip_virtual_router_addresses:
-  - 10.60.60.1
-  tenant: MY_FABRIC
-  tags:
-  - App
 vlan_internal_order:
   allocation: ascending
   range:
@@ -283,9 +257,6 @@ vlans:
   tenant: MY_FABRIC
 - id: 20
   name: Twenty
-  tenant: MY_FABRIC
-- id: 30
-  name: Thirty
   tenant: MY_FABRIC
 vrfs:
 - name: default

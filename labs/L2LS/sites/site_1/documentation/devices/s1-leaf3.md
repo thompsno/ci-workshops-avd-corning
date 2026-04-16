@@ -3,7 +3,6 @@
 ## Table of Contents
 
 - [Management](#management)
-  - [Banner](#banner)
   - [Management Interfaces](#management-interfaces)
   - [DNS Domain](#dns-domain)
   - [IP Name Servers](#ip-name-servers)
@@ -16,7 +15,6 @@
   - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
-  - [Logging](#logging)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -45,15 +43,6 @@
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 
 ## Management
-
-### Banner
-
-#### MOTD Banner
-
-```text
-You shall not pass. Unless you are authorized. Then you shall pass.
-EOF
-```
 
 ### Management Interfaces
 
@@ -185,7 +174,6 @@ management api http-commands
 ```eos
 !
 username arista privilege 15 role network-admin secret sha512 <removed>
-username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDI8Ms0bAHmZyCdXc12+HrC4pn6OZSYpixdgDQq6OqeBHhWYbGdpvqe9Vedn5iK+/rWLvSy8ESzAyLFQ60psrCsOoXrU9Kzfa5fcS9lnLZynwEZSGakzfs5t6ZfjqPA6UimPXgBlovVvyjAp8xd+7d+66pEH6sAgASpXn6XexqBHGMG59hkQcoIhxkQlN8TcUiVfLyHbPOTBHnhd+Gyk9GKMqt9lwn7E2+FGFkm2yovoWa5YdI9wg84684m8tdwvhEtKttHlITsoRDXX2wcoj0vOfjbM/Ry/3MpTZe2FAYkHXFX6unl27s+p9Z59KpIKTy78R483hFYxWoX32kZVN97 arista@corning-taiwan-10-8e63be66-eos
 ```
 
 ### Enable Password
@@ -226,31 +214,6 @@ aaa authorization exec default local
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -cvvrf=default -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management0
    no shutdown
-```
-
-### Logging
-
-#### Logging Servers and Features Summary
-
-| Type | Level |
-| -----| ----- |
-
-| VRF | Source Interface |
-| --- | ---------------- |
-| default | Management0 |
-
-| VRF | Hosts | Ports | Protocol | SSL-profile |
-| --- | ----- | ----- | -------- | ----------- |
-| default | 10.200.0.108 | Default | UDP | - |
-| default | 10.200.1.108 | Default | UDP | - |
-
-#### Logging Servers and Features Device Configuration
-
-```eos
-!
-logging host 10.200.0.108
-logging host 10.200.1.108
-logging source-interface Management0
 ```
 
 ## MLAG
@@ -323,7 +286,6 @@ vlan internal order ascending range 1006 1199
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
 | 20 | Twenty | - |
-| 30 | Thirty | - |
 | 4094 | MLAG | MLAG |
 
 ### VLANs Device Configuration
@@ -332,9 +294,6 @@ vlan internal order ascending range 1006 1199
 !
 vlan 20
    name Twenty
-!
-vlan 30
-   name Thirty
 !
 vlan 4094
    name MLAG
@@ -352,8 +311,8 @@ vlan 4094
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet1 | MLAG_s1-leaf4_Ethernet1 | *trunk | *- | *- | *MLAG | 1 |
-| Ethernet2 | L2_s1-spine1_Ethernet4 | *trunk | *20,30 | *- | *- | 2 |
-| Ethernet3 | L2_s1-spine2_Ethernet4 | *trunk | *20,30 | *- | *- | 2 |
+| Ethernet2 | L2_s1-spine1_Ethernet4 | *trunk | *20 | *- | *- | 2 |
+| Ethernet3 | L2_s1-spine2_Ethernet4 | *trunk | *20 | *- | *- | 2 |
 | Ethernet4 | SERVER_s1-host2_eth1 | *access | *20 | *- | *- | 4 |
 | Ethernet6 | MLAG_s1-leaf4_Ethernet6 | *trunk | *- | *- | *MLAG | 1 |
 
@@ -398,7 +357,7 @@ interface Ethernet6
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_s1-leaf4_Port-Channel1 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel2 | L2_SPINES_Port-Channel4 | trunk | 20,30 | - | - | - | - | 2 | - |
+| Port-Channel2 | L2_SPINES_Port-Channel4 | trunk | 20 | - | - | - | - | 2 | - |
 | Port-Channel4 | SERVER_s1-host2 | access | 20 | - | - | - | - | 4 | - |
 
 #### Port-Channel Interfaces Device Configuration
@@ -415,7 +374,7 @@ interface Port-Channel1
 interface Port-Channel2
    description L2_SPINES_Port-Channel4
    no shutdown
-   switchport trunk allowed vlan 20,30
+   switchport trunk allowed vlan 20
    switchport mode trunk
    switchport
    mlag 2
